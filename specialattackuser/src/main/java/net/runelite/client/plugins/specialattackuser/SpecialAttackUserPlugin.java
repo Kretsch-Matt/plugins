@@ -20,6 +20,8 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import org.pf4j.Extension;
+import java.util.Random;
+
 
 @Extension
 @PluginDescriptor(
@@ -30,6 +32,7 @@ import org.pf4j.Extension;
 )
 public class SpecialAttackUserPlugin extends Plugin
 {
+	public static int randomDelay;
 	@Inject
 	private Client client;
 
@@ -88,6 +91,7 @@ public class SpecialAttackUserPlugin extends Plugin
 
 		if (spec_percent < config.specialPercent() * 10)
 		{
+			randomDelay = config.delayMax() * (int) Math.random() + config.delayMin();
 			return;
 		}
 
@@ -105,6 +109,11 @@ public class SpecialAttackUserPlugin extends Plugin
 
 		try
 		{
+
+			if (randomDelay > 0){
+				randomDelay--;
+				return;
+			}
 			clientThread.invoke(() ->
 					client.invokeMenuAction(
 							"Use <col=00ff00>Special Attack</col>",
